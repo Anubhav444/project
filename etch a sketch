@@ -1,0 +1,238 @@
+### Etch-a-Sketch Project: Step-by-Step Guide
+
+---
+
+### **Step 1: Setup the Project Structure**
+1. **Create a New Git Repository**:
+   ```bash
+   git init
+   ```
+
+2. **Create HTML, CSS, and JavaScript Files**:
+   - Create the `index.html` file.
+   - Create the `style.css` file.
+   - Create the `script.js` file.
+
+3. **Link the Files in HTML**:
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Etch-a-Sketch</title>
+       <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <button id="resetButton">Reset Grid</button>
+       <div id="container"></div>
+       <script src="script.js"></script>
+   </body>
+   </html>
+   ```
+
+---
+
+### **Step 2: Create the Grid Using JavaScript**
+1. **Create the Grid in `script.js`**:
+   ```javascript
+   const container = document.getElementById("container");
+
+   function createGrid(size) {
+       container.innerHTML = ''; // Clear existing grid
+       container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+       container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+
+       for (let i = 0; i < size * size; i++) {
+           const div = document.createElement('div');
+           div.classList.add('square');
+           container.appendChild(div);
+       }
+   }
+
+   // Initialize with a default grid size of 16
+   createGrid(16);
+   ```
+
+2. **Add CSS to Style the Grid**:
+   In `style.css`, use Flexbox to create the grid:
+   ```css
+   body {
+       font-family: Arial, sans-serif;
+   }
+
+   #container {
+       display: grid;
+       grid-gap: 1px;
+       width: 960px;
+       height: 960px;
+       margin: 20px auto;
+   }
+
+   .square {
+       background-color: lightgray;
+       width: 100%;
+       height: 100%;
+       transition: background-color 0.2s ease;
+   }
+   ```
+
+---
+
+### **Step 3: Add Hover Effect**
+1. **Add Event Listener for Hover Effect in `script.js`**:
+   ```javascript
+   const squares = document.querySelectorAll('.square');
+   squares.forEach(square => {
+       square.addEventListener('mouseover', () => {
+           square.style.backgroundColor = 'black';
+       });
+   });
+   ```
+
+---
+
+### **Step 4: Add a Button to Reset the Grid**
+1. **Add a Button to Get User Input for Grid Size**:
+   ```javascript
+   const resetButton = document.getElementById('resetButton');
+   resetButton.addEventListener('click', () => {
+       let gridSize = prompt("Enter the number of squares per side (Max: 100):", 16);
+       gridSize = Math.min(Math.max(gridSize, 1), 100); // Clamp between 1 and 100
+       createGrid(gridSize);
+   });
+   ```
+
+---
+
+### **Step 5: Reset the Grid**
+1. **Clear the Existing Grid and Create a New One**:
+   This functionality is already covered by the `createGrid` function, which clears the `container` and generates the new grid based on the user input.
+
+---
+
+### **Step 6: Push Your Project to GitHub**
+1. **Initialize Git Repository and Push**:
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin <YOUR_GITHUB_REPOSITORY_URL>
+   git push -u origin main
+   ```
+
+---
+
+### **Optional: Extra Credit - Advanced Hover Effects**
+1. **Randomize RGB Color on Hover**:
+   Add functionality to randomize the color when hovering over a square:
+   ```javascript
+   function getRandomColor() {
+       const r = Math.floor(Math.random() * 256);
+       const g = Math.floor(Math.random() * 256);
+       const b = Math.floor(Math.random() * 256);
+       return `rgb(${r}, ${g}, ${b})`;
+   }
+
+   squares.forEach(square => {
+       square.addEventListener('mouseover', () => {
+           square.style.backgroundColor = getRandomColor();
+       });
+   });
+   ```
+
+2. **Progressive Darkening Effect**:
+   Implement a darkening effect by adjusting opacity:
+   ```javascript
+   squares.forEach(square => {
+       let opacity = 0;
+       square.addEventListener('mouseover', () => {
+           opacity += 0.1;
+           square.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
+       });
+   });
+   ```
+
+---
+
+### **Final Code**
+
+#### **index.html**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-a-Sketch</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="resetButton">Reset Grid</button>
+    <div id="container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+#### **style.css**
+```css
+body {
+    font-family: Arial, sans-serif;
+}
+
+#container {
+    display: grid;
+    grid-gap: 1px;
+    width: 960px;
+    height: 960px;
+    margin: 20px auto;
+}
+
+.square {
+    background-color: lightgray;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.2s ease;
+}
+```
+
+#### **script.js**
+```javascript
+const container = document.getElementById("container");
+
+function createGrid(size) {
+    container.innerHTML = ''; // Clear existing grid
+    container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+
+    for (let i = 0; i < size * size; i++) {
+        const div = document.createElement('div');
+        div.classList.add('square');
+        container.appendChild(div);
+    }
+
+    const squares = document.querySelectorAll('.square');
+    squares.forEach(square => {
+        square.addEventListener('mouseover', () => {
+            square.style.backgroundColor = 'black'; // Or implement random color/darkening here
+        });
+    });
+}
+
+// Initial grid
+createGrid(16);
+
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', () => {
+    let gridSize = prompt("Enter the number of squares per side (Max: 100):", 16);
+    gridSize = Math.min(Math.max(gridSize, 1), 100); // Clamp between 1 and 100
+    createGrid(gridSize);
+});
+```
+
+---
+
+### **Key Concepts Used**
+- **Flexbox for Grid Layout**: Used `display: grid` in CSS to lay out the squares.
+- **JavaScript Event Listeners**: Used `mouseover` to change square colors on hover.
+- **Prompt for User Input**: Used `prompt()` to get the grid size from the user.
