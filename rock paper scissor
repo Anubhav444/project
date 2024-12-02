@@ -1,0 +1,261 @@
+### Rock-Paper-Scissors Game: Step-by-Step Implementation
+
+---
+
+#### **Step 1: Setup the Project Structure**
+1. **Create a new Git repository**:
+   ```bash
+   git init
+   ```
+   Commit after setting up the structure:
+   ```bash
+   git add .
+   git commit -m "Initial project structure setup"
+   ```
+
+2. **HTML File Setup**:
+   Create a `index.html` file with the following structure:
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Rock Paper Scissors</title>
+   </head>
+   <body>
+       <script src="script.js"></script>
+   </body>
+   </html>
+   ```
+
+3. **JavaScript File**:
+   Create a `script.js` file:
+   ```javascript
+   console.log("Hello World");
+   ```
+   Open the `index.html` in the browser and check the console to confirm the message appears.
+
+---
+
+#### **Step 2: Get the Computer's Choice**
+Define a function `getComputerChoice`:
+```javascript
+function getComputerChoice() {
+    const choices = ["rock", "paper", "scissors"];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+}
+
+// Test the function
+console.log(getComputerChoice());
+```
+**Commit**:
+```bash
+git add .
+git commit -m "Add getComputerChoice function"
+```
+
+---
+
+#### **Step 3: Get the Human's Choice**
+Define a function `getHumanChoice`:
+```javascript
+function getHumanChoice() {
+    let choice = prompt("Enter your choice (rock, paper, scissors):").toLowerCase();
+    while (!["rock", "paper", "scissors"].includes(choice)) {
+        choice = prompt("Invalid choice! Please enter rock, paper, or scissors:").toLowerCase();
+    }
+    return choice;
+}
+
+// Test the function
+console.log(getHumanChoice());
+```
+**Commit**:
+```bash
+git add .
+git commit -m "Add getHumanChoice function"
+```
+
+---
+
+#### **Step 4: Declare the Player's Score Variables**
+Add the following global variables:
+```javascript
+let humanScore = 0;
+let computerScore = 0;
+```
+**Commit**:
+```bash
+git add .
+git commit -m "Declare player score variables"
+```
+
+---
+
+#### **Step 5: Play a Single Round**
+Define the `playRound` function:
+```javascript
+function playRound(humanChoice, computerChoice) {
+    humanChoice = humanChoice.toLowerCase();
+    console.log(`You chose: ${humanChoice}`);
+    console.log(`Computer chose: ${computerChoice}`);
+
+    if (humanChoice === computerChoice) {
+        console.log("It's a tie!");
+        return;
+    }
+
+    const winConditions = {
+        rock: "scissors",
+        paper: "rock",
+        scissors: "paper",
+    };
+
+    if (winConditions[humanChoice] === computerChoice) {
+        console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+        humanScore++;
+    } else {
+        console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+        computerScore++;
+    }
+}
+
+// Test the function
+const humanSelection = getHumanChoice();
+const computerSelection = getComputerChoice();
+playRound(humanSelection, computerSelection);
+
+console.log(`Scores - Human: ${humanScore}, Computer: ${computerScore}`);
+```
+**Commit**:
+```bash
+git add .
+git commit -m "Add playRound function"
+```
+
+---
+
+#### **Step 6: Play the Entire Game**
+Define the `playGame` function:
+```javascript
+function playGame() {
+    humanScore = 0;
+    computerScore = 0;
+
+    for (let i = 0; i < 5; i++) {
+        console.log(`Round ${i + 1}`);
+        const humanChoice = getHumanChoice();
+        const computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
+        console.log(`Scores after round ${i + 1} - Human: ${humanScore}, Computer: ${computerScore}`);
+    }
+
+    console.log("Game Over!");
+    if (humanScore > computerScore) {
+        console.log("You are the winner!");
+    } else if (computerScore > humanScore) {
+        console.log("Computer wins!");
+    } else {
+        console.log("It's a tie!");
+    }
+}
+
+// Start the game
+playGame();
+```
+**Commit**:
+```bash
+git add .
+git commit -m "Add playGame function"
+```
+
+---
+
+### **Final Code Structure**
+
+#### **HTML (`index.html`)**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+#### **JavaScript (`script.js`)**
+```javascript
+let humanScore = 0;
+let computerScore = 0;
+
+function getComputerChoice() {
+    const choices = ["rock", "paper", "scissors"];
+    return choices[Math.floor(Math.random() * choices.length)];
+}
+
+function getHumanChoice() {
+    let choice = prompt("Enter your choice (rock, paper, scissors):").toLowerCase();
+    while (!["rock", "paper", "scissors"].includes(choice)) {
+        choice = prompt("Invalid choice! Please enter rock, paper, or scissors:").toLowerCase();
+    }
+    return choice;
+}
+
+function playRound(humanChoice, computerChoice) {
+    humanChoice = humanChoice.toLowerCase();
+    console.log(`You chose: ${humanChoice}`);
+    console.log(`Computer chose: ${computerChoice}`);
+
+    if (humanChoice === computerChoice) {
+        console.log("It's a tie!");
+        return;
+    }
+
+    const winConditions = {
+        rock: "scissors",
+        paper: "rock",
+        scissors: "paper",
+    };
+
+    if (winConditions[humanChoice] === computerChoice) {
+        console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+        humanScore++;
+    } else {
+        console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+        computerScore++;
+    }
+}
+
+function playGame() {
+    humanScore = 0;
+    computerScore = 0;
+
+    for (let i = 0; i < 5; i++) {
+        console.log(`Round ${i + 1}`);
+        const humanChoice = getHumanChoice();
+        const computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
+        console.log(`Scores after round ${i + 1} - Human: ${humanScore}, Computer: ${computerScore}`);
+    }
+
+    console.log("Game Over!");
+    if (humanScore > computerScore) {
+        console.log("You are the winner!");
+    } else if (computerScore > humanScore) {
+        console.log("Computer wins!");
+    } else {
+        console.log("It's a tie!");
+    }
+}
+
+playGame();
+```
+
+You’re all set to play the game via the browser console! 🎮
