@@ -1,0 +1,255 @@
+### **Basic Calculator Project Step-by-Step Guide**
+
+---
+
+### **Step 1: Set up the Project Structure**
+
+1. **Create a New Git Repository**:
+   ```bash
+   git init
+   ```
+
+2. **Create the HTML, CSS, and JavaScript Files**:
+   - `index.html`
+   - `style.css`
+   - `script.js`
+
+---
+
+### **Step 2: Define Calculator Functions**
+
+1. **Create Basic Math Functions**:
+   In `script.js`, define the functions for addition, subtraction, multiplication, and division:
+
+   ```javascript
+   function add(a, b) {
+       return a + b;
+   }
+
+   function subtract(a, b) {
+       return a - b;
+   }
+
+   function multiply(a, b) {
+       return a * b;
+   }
+
+   function divide(a, b) {
+       if (b === 0) {
+           return 'Error: Cannot divide by 0';
+       }
+       return a / b;
+   }
+   ```
+
+2. **Create an `operate` Function**:
+   This function will take an operator and two numbers, then call the appropriate math function.
+
+   ```javascript
+   function operate(operator, a, b) {
+       if (operator === '+') {
+           return add(a, b);
+       } else if (operator === '-') {
+           return subtract(a, b);
+       } else if (operator === '*') {
+           return multiply(a, b);
+       } else if (operator === '/') {
+           return divide(a, b);
+       }
+   }
+   ```
+
+---
+
+### **Step 3: Create Basic HTML Structure**
+
+1. **HTML Layout**:
+   Here's how the basic HTML structure of the calculator can look:
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Calculator</title>
+       <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <div class="calculator">
+           <div id="display">0</div>
+           <div class="buttons">
+               <button class="button" id="clear">C</button>
+               <button class="button" id="backspace">←</button>
+               <button class="button">/</button>
+               <button class="button">*</button>
+
+               <button class="button">7</button>
+               <button class="button">8</button>
+               <button class="button">9</button>
+               <button class="button">-</button>
+
+               <button class="button">4</button>
+               <button class="button">5</button>
+               <button class="button">6</button>
+               <button class="button">+</button>
+
+               <button class="button">1</button>
+               <button class="button">2</button>
+               <button class="button">3</button>
+               <button class="button" id="equals">=</button>
+
+               <button class="button">0</button>
+               <button class="button">.</button>
+           </div>
+       </div>
+       <script src="script.js"></script>
+   </body>
+   </html>
+   ```
+
+---
+
+### **Step 4: Add Display Logic**
+
+1. **Update the Display with Button Presses**:
+   In `script.js`, create a function to update the display when a number or operator is clicked:
+
+   ```javascript
+   let currentInput = '';
+   let firstNum = null;
+   let secondNum = null;
+   let currentOperator = null;
+   let resultDisplayed = false;
+
+   const display = document.getElementById('display');
+   
+   const buttons = document.querySelectorAll('.button');
+   buttons.forEach(button => {
+       button.addEventListener('click', (event) => {
+           const value = event.target.innerText;
+
+           if (value >= '0' && value <= '9') {
+               if (resultDisplayed) {
+                   currentInput = value;
+                   resultDisplayed = false;
+               } else {
+                   currentInput += value;
+               }
+               updateDisplay();
+           }
+
+           if (value === '.') {
+               if (!currentInput.includes('.')) {
+                   currentInput += '.';
+               }
+               updateDisplay();
+           }
+
+           if (value === 'C') {
+               clear();
+           }
+
+           if (value === '←') {
+               currentInput = currentInput.slice(0, -1);
+               updateDisplay();
+           }
+
+           if (value === '=') {
+               if (firstNum !== null && currentOperator !== null) {
+                   secondNum = parseFloat(currentInput);
+                   let result = operate(currentOperator, firstNum, secondNum);
+                   displayResult(result);
+               }
+           }
+
+           if (['+', '-', '*', '/'].includes(value)) {
+               if (firstNum === null) {
+                   firstNum = parseFloat(currentInput);
+                   currentOperator = value;
+                   currentInput = '';
+               } else {
+                   secondNum = parseFloat(currentInput);
+                   let result = operate(currentOperator, firstNum, secondNum);
+                   displayResult(result);
+                   firstNum = result;
+                   currentOperator = value;
+                   currentInput = '';
+               }
+           }
+       });
+   });
+
+   function updateDisplay() {
+       display.innerText = currentInput || '0';
+   }
+
+   function displayResult(result) {
+       if (result === 'Error: Cannot divide by 0') {
+           display.innerText = result;
+       } else {
+           display.innerText = result.toFixed(2);
+       }
+       resultDisplayed = true;
+   }
+
+   function clear() {
+       currentInput = '';
+       firstNum = null;
+       secondNum = null;
+       currentOperator = null;
+       display.innerText = '0';
+   }
+   ```
+
+---
+
+### **Step 5: Add Error Handling and Extra Features**
+
+1. **Handle Divide by Zero Error**:
+   If the user tries to divide by zero, the error message will be shown on the display.
+   
+   ```javascript
+   function divide(a, b) {
+       if (b === 0) {
+           return 'Error: Cannot divide by 0';
+       }
+       return a / b;
+   }
+   ```
+
+2. **Backspace Button**:
+   The `←` button removes the last character from the display.
+
+   This functionality is already covered by the `backspace` button event listener in the above code.
+
+3. **Floating Point Numbers**:
+   Users can enter decimals, and the program will ensure they don't enter multiple decimal points.
+
+4. **Clear Button**:
+   Pressing the "C" button clears all the data and resets the calculator.
+
+---
+
+### **Step 6: Push Your Project to GitHub**
+1. **Push the Project**:
+   ```bash
+   git add .
+   git commit -m "Initial calculator functionality"
+   git remote add origin <YOUR_GITHUB_REPOSITORY_URL>
+   git push -u origin main
+   ```
+
+---
+
+### **Key Concepts Used**:
+- **Event Listeners**: Used to handle button clicks.
+- **Conditionals**: To check for operators and execute the corresponding math operations.
+- **Global Variables**: To store the current input, the first and second numbers, and the operator.
+- **DOM Manipulation**: To update the display and handle user input.
+
+---
+
+### **Conclusion**
+
+This project guides you through building a basic, functional calculator using JavaScript, HTML, and CSS. You can extend this further by adding more advanced features such as keyboard support, memory functions, and styling improvements!
